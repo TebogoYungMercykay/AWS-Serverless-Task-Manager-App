@@ -1,15 +1,5 @@
-# package directories
-node_modules
-jspm_packages
-
-# Serverless directories
-.serverless
-
-# Webpack directories
-.webpack
-
-# Local DynamoDb
-.dynamodb
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
 
 *~
 *.sw[mnpcod]
@@ -43,4 +33,3 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 node_modules
-
