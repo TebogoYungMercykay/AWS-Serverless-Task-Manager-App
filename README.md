@@ -2,9 +2,7 @@
 
 ![Serverless](./docs/images/screenshots/image-20.png)
 
-This is a cloud-native TODO application developed using AWS Lambda and the Serverless Framework. It enables users to manage personal tasks by creating, updating, deleting, and retrieving TODO items. The application ensures that each user can only access their own data and allows optional image attachments for each task.
-
-This project is fully serverless and leverages managed AWS services for scalability, reliability, and performance without the need to manage infrastructure.
+This is a Full-Stack serverless TODO application built with AWS Lambda, API Gateway, DynamoDB, and React. The application features secure authentication through Auth0 and demonstrates modern serverless architecture patterns. It enables users to manage personal tasks by creating, updating, deleting, and retrieving TODO items. The application ensures that each user can only access their own data and allows optional image attachments for each task.
 
 ## Data Model
 
