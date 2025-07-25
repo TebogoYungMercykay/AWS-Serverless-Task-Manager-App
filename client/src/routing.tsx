@@ -21,13 +21,13 @@ export const makeAuthRouting = () => {
       <div>
         <Route
           path="/callback"
-          render={props => {
+          render={(props) => {
             handleAuthentication(props)
             return <Callback />
           }}
         />
         <Route
-          render={props => {
+          render={(props) => {
             return <App auth={auth} {...props} />
           }}
         />
