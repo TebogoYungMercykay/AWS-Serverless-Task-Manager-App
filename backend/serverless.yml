@@ -1,4 +1,3 @@
-# TODO: Change the name of the org 
 org: tebogoyungmercykay
 app: serverless-todoapp
 service: serverless-todoapp
@@ -12,7 +11,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
- # lambdaHashingVersion: '20201221'
+  # lambdaHashingVersion: '20201221'
 
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-2'}
@@ -21,40 +20,38 @@ provider:
     lambda: true
     apiGateway: true
 
-  # Use these variables in the functions and resouorces section below. For example, 
+  # Use these variables in the functions and resouorces section below. For example,
   # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
   environment:
     PROJECT_NAME: MyTodoApp
     TODOS_TABLE: mytodoapp-${self:provider.stage}
-  #  TODOS_CREATED_AT_INDEX: CreatedAtIndex
+    #  TODOS_CREATED_AT_INDEX: CreatedAtIndex
     S3_BUCKET_NAME: mytodoapp-${self:provider.stage}
   #  SIGNED_URL_EXPIRATION: 300
 
- # logs:
-    # Enable API Gateway logs
-   # restApi: true
+  # logs:
+  # Enable API Gateway logs
+  # restApi: true
 
- # iam:
-   # role:
-    #  statements:
-      #  - Effect: Allow
-        #  Action:
-         #   - xray:PutTelemetryRecords
-          #  - xray:PutTraceSegments
-         # Resource: "*"
+  # iam:
+  # role:
+  #  statements:
+  #  - Effect: Allow
+  #  Action:
+  #   - xray:PutTelemetryRecords
+  #  - xray:PutTraceSegments
+  # Resource: "*"
 
-# TODO: Configure this function - 
-  # Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
-  # To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
-  # To validate incoming HTTP requests, we have provided the request schemas in function definition below. 
+# iamRoleStatements property. Decide the Actions and AWS Resource.
+# To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
+# To validate incoming HTTP requests, we have provided the request schemas in function definition below.
 
 functions:
-
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  # TODO: Configure this function - 
-  # Provide iamRoleStatements property for performing Actions on DynamoDB
+  # Get todos
+
   GetTodos:
     handler: src/lambda/http/getTodos.handler
     events:
@@ -72,11 +69,11 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: 
-          - '*'
-
+        Resource:
+          - "*"
 
   # Create todo
+
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -100,10 +97,10 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: 
-          - '*'
+        Resource:
+          - "*"
 
-  #### Update todo
+  # Update todo
 
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
@@ -128,12 +125,11 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: 
-          - '*'
+        Resource:
+          - "*"
 
-  ### Delete Todo
-  # TODO: Configure this function
-  # Provide property for setting up CORS, Authorizer, iamRoleStatements
+  # Delete todo
+
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
@@ -151,11 +147,10 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: 
-          - '*' 
+        Resource:
+          - "*"
 
-  # TODO: Configure this function
-  # Provide property for setting up CORS, Authorizer, iamRoleStatements
+  # Generate Upload Url
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
@@ -170,13 +165,11 @@ functions:
       - Effect: Allow
         Action:
           - s3:*
-          - xray:PutTraceSegments 
+          - xray:PutTraceSegments
         Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_NAME}/*
-
 
 resources:
   Resources:
-    # TODO: Add any necessary AWS resources
     TodosTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -195,7 +188,7 @@ resources:
     onlyBody:
       Type: "AWS::ApiGateway::RequestValidator"
       Properties:
-        Name: 'only-body'
+        Name: "only-body"
         RestApiId:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
@@ -207,9 +200,9 @@ resources:
         CorsConfiguration:
           CorsRules:
             - AllowedOrigins:
-                - '*'
+                - "*"
               AllowedHeaders:
-                - '*'
+                - "*"
               AllowedMethods:
                 - GET
                 - PUT
@@ -217,11 +210,11 @@ resources:
                 - DELETE
                 - HEAD
               MaxAge: 300
-   
+
     RequestBodyValidator:
       Type: AWS::ApiGateway::RequestValidator
       Properties:
-        Name: 'request-body-validator'
+        Name: "request-body-validator"
         RestApiId:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
@@ -247,28 +240,27 @@ resources:
           gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,DELETE,PATCH,PUT'"
         ResponseType: DEFAULT_5XX
         RestApiId:
-          Ref: ApiGatewayRestApi 
+          Ref: ApiGatewayRestApi
 
     BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
         PolicyDocument:
           Id: MyPolicy
-          Version: '2012-10-17'
+          Version: "2012-10-17"
           Statement:
             - Sid: PublicReadForGetBucketObjects
               Effect: Allow
-              Principal: '*'
-              Action: 's3:GetObject'
-              Resource: 'arn:aws:s3:::${self:provider.environment.S3_BUCKET_NAME}/*'
+              Principal: "*"
+              Action: "s3:GetObject"
+              Resource: "arn:aws:s3:::${self:provider.environment.S3_BUCKET_NAME}/*"
         Bucket: !Ref AttachmentsBucket
-  
 
 custom:
   documentation:
     api:
       info:
-        version: '1.0.0'
+        version: "1.0.0"
         title: serverless-api
         description: serverless-api
     models:
@@ -298,6 +290,4 @@ custom:
             dueDate:
               type: string
             done:
-              type: boolean  
-  
-
+              type: boolean

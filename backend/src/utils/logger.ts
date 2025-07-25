@@ -1,4 +1,4 @@
-import * as winston from 'winston'
+import * as winston from "winston";
 
 /**
  * Create a logger instance to write log messages in JSON format.
@@ -7,11 +7,9 @@ import * as winston from 'winston'
  */
 export function createLogger(loggerName: string) {
   return winston.createLogger({
-    level: 'info',
+    level: "info",
     format: winston.format.json(),
     defaultMeta: { name: loggerName },
-    transports: [
-      new winston.transports.Console()
-    ]
-  })
+    transports: [new winston.transports.Console()],
+  });
 }
